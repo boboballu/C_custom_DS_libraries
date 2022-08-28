@@ -48,25 +48,16 @@ bool hash_table::table_insert(hash_table_entry_t& entry) {
     if (table[hash] == NULL) {
         table[hash] = &entry;
     }
-    // overrite
-    else if (strcmp(entry.key, table[hash]->key) == 0) {
-        // printf("--key: %s | --value %s | overrite\n", entry.key, entry.value);
-        table[hash] = &entry;
-    }
-    // collision
-    else {
-        printf("--key: %s | --value: %s | Collision at %d\n", entry.key, entry.value, hash);
-    }
-    
-    
     // collision - linear probing / open addressing
-    // for(int i=0; i<10; i++) {
-    //     int linear_probe_hash = (hash + i) % 10;
-    //     if (table[linear_probe_hash] == NULL) {
-    //         table[linear_probe_hash] = &entry;
-    //         // break;
-    //     }
-    // }
+    else {
+        for(int i=0; i<10; i++) {
+            int linear_probe_hash = (hash + i) % 10;
+            if (table[linear_probe_hash] == NULL) {
+                table[linear_probe_hash] = &entry;
+                break;
+            }
+        }
+    }
     return true;
 }
 
@@ -75,18 +66,15 @@ hash_table_entry_t* hash_table::table_search(hash_table_entry_t entry) {
     if (table[hash]==NULL) {
         return NULL;
     }
-    else if (strcmp(table[hash]->key, entry.key) == 0) {
-        return table[hash];
-    }
     // collision  - linear probing / open addressing
-    // else {
-    //     for(int i=0; i<10; i++) {
-    //         int linear_probe_hash = (hash + i) % 10;
-    //         if (strcmp(table[linear_probe_hash]->key, entry.key) == 0) {
-    //             return table[linear_probe_hash];
-    //         }
-    //     }
-    // }
+    else {
+        for(int i=0; i<10; i++) {
+            int linear_probe_hash = (hash + i) % 10;
+            if (strcmp(table[linear_probe_hash]->key, entry.key) == 0) {
+                return table[linear_probe_hash];
+            }
+        }
+    }
     return NULL;
 }
 
@@ -120,8 +108,6 @@ int main(){
     hash_table_entry_t entry7 = {"ear", "ring"};
     hash_table_entry_t entry8 = {"tree", "top"};
 
-    printf("key: %s | value: %s\n", entry1.key, entry1.value);
-    printf("hash for the entry is %d\n", hash_table::compute_hash(entry1));
     ht.table_insert(entry1);
     ht.table_insert(entry2);
     ht.table_insert(entry3);
@@ -131,6 +117,7 @@ int main(){
     ht.table_insert(entry7);
     ht.table_insert(entry8);
     ht.table_delete(entry3);
+
     printf("--------- print the table -----------\n");
     ht.table_print();
 
