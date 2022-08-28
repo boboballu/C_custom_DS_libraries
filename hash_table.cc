@@ -45,29 +45,28 @@ void hash_table::table_print() {
 bool hash_table::table_insert(hash_table_entry_t& entry) {
     uint32_t hash = compute_hash(entry);
     // insert if the table is empty
-    // if (table[hash] == NULL) {
-    //     table[hash] = &entry;
-    // }
-    // // overrite
-    // else if (strcmp(entry.key, table[hash]->key) == 0) {
-    //     // printf("--key: %s | --value %s | overrite\n", entry.key, entry.value);
-    //     table[hash] = &entry;
-    // }
-    // // collision
-    // else {
-    //     printf("--key: %s | --value: %s | Collision at %d\n", entry.key, entry.value, hash);
-    // }
+    if (table[hash] == NULL) {
+        table[hash] = &entry;
+    }
+    // overrite
+    else if (strcmp(entry.key, table[hash]->key) == 0) {
+        // printf("--key: %s | --value %s | overrite\n", entry.key, entry.value);
+        table[hash] = &entry;
+    }
+    // collision
+    else {
+        printf("--key: %s | --value: %s | Collision at %d\n", entry.key, entry.value, hash);
+    }
     
     
     // collision - linear probing / open addressing
-    // printf("--key: %s | --value: %s | Collision at %d\n", entry.key, entry.value, hash);
-    for(int i=0; i<10; i++) {
-        int linear_probe_hash = (hash + i) % 10;
-        if (table[linear_probe_hash] == NULL) {
-            table[linear_probe_hash] = &entry;
-            // break;
-        }
-    }
+    // for(int i=0; i<10; i++) {
+    //     int linear_probe_hash = (hash + i) % 10;
+    //     if (table[linear_probe_hash] == NULL) {
+    //         table[linear_probe_hash] = &entry;
+    //         // break;
+    //     }
+    // }
     return true;
 }
 
@@ -76,18 +75,18 @@ hash_table_entry_t* hash_table::table_search(hash_table_entry_t entry) {
     if (table[hash]==NULL) {
         return NULL;
     }
-    // else if (strcmp(table[hash]->key, entry.key) == 0) {
-    //     return table[hash];
-    // }
-    // collision  - linear probing / open addressing
-    else {
-        for(int i=0; i<10; i++) {
-            int linear_probe_hash = (hash + i) % 10;
-            if (strcmp(table[linear_probe_hash]->key, entry.key) == 0) {
-                return table[linear_probe_hash];
-            }
-        }
+    else if (strcmp(table[hash]->key, entry.key) == 0) {
+        return table[hash];
     }
+    // collision  - linear probing / open addressing
+    // else {
+    //     for(int i=0; i<10; i++) {
+    //         int linear_probe_hash = (hash + i) % 10;
+    //         if (strcmp(table[linear_probe_hash]->key, entry.key) == 0) {
+    //             return table[linear_probe_hash];
+    //         }
+    //     }
+    // }
     return NULL;
 }
 
@@ -98,7 +97,17 @@ bool hash_table::table_create_and_insert_enrty(hash_table_entry_t entry) {
     table_insert(*ptr);
 }
 
-
+bool hash_table::table_delete(hash_table_entry_t entry) {
+    uint32_t hash = compute_hash(entry);
+    if (table[hash] == NULL) {
+        printf("--table already empty--\n");
+    }
+    else {
+        // cannot delete a pointer to a location which is not in heap
+        // delete table[hash];
+        table[hash] = NULL;
+    }
+}
 int main(){
     hash_table ht;
 
@@ -121,7 +130,7 @@ int main(){
     ht.table_insert(entry6);
     ht.table_insert(entry7);
     ht.table_insert(entry8);
-
+    ht.table_delete(entry3);
     printf("--------- print the table -----------\n");
     ht.table_print();
 
