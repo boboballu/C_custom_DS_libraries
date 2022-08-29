@@ -9,7 +9,7 @@
 
 // public functions
 uint32_t hash_table::compute_hash(hash_table_entry_t entry) {
-    // a simple hash function computing hash based on sum of
+    // a simple hash function - computing hash based on sum of
     // ascii values of the key string.
     uint32_t hash=0;
     for (int i=0; entry.key[i] != '\0'; i++) {
@@ -108,6 +108,7 @@ int main(){
     hash_table_entry_t entry7 = {"ear", "ring"};
     hash_table_entry_t entry8 = {"tree", "top"};
 
+    // construct a hash table (use only the control portion of the hash_table)
     ht.table_insert(entry1);
     ht.table_insert(entry2);
     ht.table_insert(entry3);
@@ -116,11 +117,14 @@ int main(){
     ht.table_insert(entry6);
     ht.table_insert(entry7);
     ht.table_insert(entry8);
+    // delete a entry in the hash table
     ht.table_delete(entry3);
 
     printf("--------- print the table -----------\n");
     ht.table_print();
 
+
+    // search the hash table
     hash_table_entry_t* search_ptr = ht.table_search((hash_table_entry_t){"bike", ""});
     if (search_ptr != NULL) {
         printf("search:\t|\t --key %s \t --value: %s \t|\n", search_ptr->key, search_ptr->value);
