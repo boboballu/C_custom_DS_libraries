@@ -4,8 +4,8 @@
 # /********************************************************************************/
 cc=g++
 CFLAGS= -g
-DEPS = hash_table.cc
-OBJ = hash_table.o
+DEPS = hash_table.cc main.cc
+OBJ = hash_table.o main.o
 
 # Makefile rules:
 # tab should be used for indentation.
